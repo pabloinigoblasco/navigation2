@@ -512,7 +512,7 @@ void RangeSensorLayer::updateCosts(
   buffered_readings_ = 0;
 
   // if not current due to reset, set current now after clearing
-  if (!current_ && was_reset_) {
+  if (was_reset_) {
     was_reset_ = false;
     current_ = true;
   }
@@ -524,6 +524,7 @@ void RangeSensorLayer::reset()
   deactivate();
   resetMaps();
   was_reset_ = true;
+  current_ = false;
   activate();
 }
 
