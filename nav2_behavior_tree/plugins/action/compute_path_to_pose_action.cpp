@@ -30,8 +30,27 @@ ComputePathToPoseAction::ComputePathToPoseAction(
 
 void ComputePathToPoseAction::on_tick()
 {
+  goal_.planner_id = "";
   getInput("goal", goal_.pose);
   getInput("planner_id", goal_.planner_id);
+
+  RCLCPP_DEBUG_STREAM(rclcpp::get_logger("ComputePathToPoseAction"), "received planner id: " << goal_.planner_id );
+
+  // controller selector 
+  if(goal_.planner_id == "")
+  {
+    auto planner_selector_desired_controller = config().blackboard->get<std::string>("desired_planner_id");
+    RCLCPP_DEBUG_STREAM(rclcpp::get_logger("ComputePathToPoseAction"), "planner from ros2 parameter: " << planner_selector_desired_controller);
+    if (planner_selector_desired_controller!= "")
+    {
+      RCLCPP_DEBUG_STREAM(rclcpp::get_logger("ComputePathToPoseAction"), "planner successfuly selected: " << planner_selector_desired_controller);
+      goal_.planner_id = planner_selector_desired_controller;
+    }
+    else
+    {
+      RCLCPP_DEBUG_STREAM(rclcpp::get_logger("ComputePathToPoseAction"), "planner selection failure. planner_id was not provided neither: from btNode input 'planner_id' nor planner selector ros2 param 'PlannerSelector.planner_id'");
+    }
+  }
 }
 
 BT::NodeStatus ComputePathToPoseAction::on_success()

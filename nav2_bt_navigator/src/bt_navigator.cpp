@@ -57,7 +57,8 @@ BtNavigator::BtNavigator()
     "nav2_round_robin_node_bt_node",
     "nav2_transform_available_condition_bt_node",
     "nav2_time_expired_condition_bt_node",
-    "nav2_distance_traveled_condition_bt_node"
+    "nav2_distance_traveled_condition_bt_node",
+    "nav2_planner_selector_bt_node",
   };
 
   // Declare this node's parameters
@@ -121,6 +122,7 @@ BtNavigator::on_configure(const rclcpp_lifecycle::State & /*state*/)
   blackboard_ = BT::Blackboard::create();
 
   // Put items on the blackboard
+  blackboard_->set<LifecycleNode::SharedPtr>("bt_navigator_node", shared_from_this());  // NOLINT
   blackboard_->set<rclcpp::Node::SharedPtr>("node", client_node_);  // NOLINT
   blackboard_->set<std::shared_ptr<tf2_ros::Buffer>>("tf_buffer", tf_);  // NOLINT
   blackboard_->set<std::chrono::milliseconds>("server_timeout", std::chrono::milliseconds(10));  // NOLINT
