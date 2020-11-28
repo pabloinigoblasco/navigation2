@@ -79,5 +79,10 @@
       <input_port name="filter_duration">Duration (secs) for velocity smoothing filter</input_port>
     </Decorator>
 
+    <Decorator ID="PlannerSelector">
+      <input_port name="default_planner_id">default planner id</input_port>
+      <input_port name="default_controller_id">default controller id</input_port>
+    </Decorator>
+
   </TreeNodesModel>
 </root>

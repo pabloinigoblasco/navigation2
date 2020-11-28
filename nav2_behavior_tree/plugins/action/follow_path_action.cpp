@@ -30,8 +30,29 @@ FollowPathAction::FollowPathAction(
 
 void FollowPathAction::on_tick()
 {
+  goal_.controller_id = "";
   getInput("path", goal_.path);
   getInput("controller_id", goal_.controller_id);
+  
+
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("FollowPathAction"), "controller from input: " << goal_.controller_id);
+
+  // controller selector 
+  if(goal_.controller_id == "")
+  {
+    
+    auto controller_selector_desired_controller = config().blackboard->get<std::string>("desired_controller_id");
+    RCLCPP_INFO_STREAM(rclcpp::get_logger("FollowPathAction"), "controller from blackboard 'desired_controller_id': " << controller_selector_desired_controller);
+    if (controller_selector_desired_controller!= "")
+    {
+      goal_.controller_id = controller_selector_desired_controller;
+      RCLCPP_DEBUG_STREAM(rclcpp::get_logger("FollowPathAction"), "controller successfuly selected: " << controller_selector_desired_controller);   
+    }
+    else
+    {
+      RCLCPP_DEBUG_STREAM(rclcpp::get_logger("FollowPathAction"), "controller selection failure. controller_id was not provided neither: from btNode input 'controller_id' nor controller selector ros2 param 'PlannerSelector.controller_id'");
+    }
+  }
 }
 
 void FollowPathAction::on_wait_for_result()
