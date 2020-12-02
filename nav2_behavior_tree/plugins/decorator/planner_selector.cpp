@@ -46,6 +46,7 @@ PlannerSelector::PlannerSelector(
 : BT::DecoratorNode(name, conf)
 {
   auto logger = rclcpp::get_logger("planner_selector");
+  RCLCPP_WARN_STREAM(rclcpp::get_logger("planner_selector"), "Planner selector constructor ");
 
   auto node = config().blackboard->get<nav2_util::LifecycleNode::SharedPtr>("bt_navigator_node");
   RCLCPP_WARN_STREAM(rclcpp::get_logger("planner_selector"), "Planner selector Start, Node: " << node->get_name());
@@ -62,11 +63,11 @@ PlannerSelector::PlannerSelector(
   // second: navigation bt xml
 
   //------- Default planner configuration -------------------  
-  bool update_parameter_server = false;
+  bool udpate_ros2_parameter = false;
   if(getInput(DEFAULT_PLANNER_BT_INPUT, planner_id_))
   {
     RCLCPP_INFO_STREAM(logger, "PlannerSelector, default planner_id was specified in the bt node input in bt xml '"<< DEFAULT_PLANNER_BT_INPUT << "': " << planner_id_);
-    update_parameter_server  = true;
+    udpate_ros2_parameter  = true;
   }
   else if(node->get_parameter(PLANNER_PARAM_NAME, planner_id_))
   {
@@ -75,20 +76,21 @@ PlannerSelector::PlannerSelector(
   else
   {
     RCLCPP_WARN_STREAM(logger, "PlannerSelector, default planner_id was not specified neither as ros2 parameter '" << PLANNER_PARAM_NAME << "' nor bt node input in bt xml '" << DEFAULT_PLANNER_BT_INPUT << "'. Using by default '" << planner_id_ << "'");
-    update_parameter_server  = true;
+    udpate_ros2_parameter  = true;
   }
 
-  if(update_parameter_server)
+  if(udpate_ros2_parameter)
   {
+    RCLCPP_WARN_STREAM(logger, "updating planner id to:" <<planner_id_ );
     node->set_parameter(rclcpp::Parameter(PLANNER_PARAM_NAME, planner_id_));
   }
 
   //------- Default controller configuration -------------------  
-  update_parameter_server = false;
+  udpate_ros2_parameter = false;
   if(getInput(DEFAULT_CONTROLLER_BT_INPUT, controller_id_))
   {
     RCLCPP_INFO_STREAM(logger, "PlannerSelector, default controller_id was specified in the bt node input in bt xml '" << DEFAULT_CONTROLLER_BT_INPUT << "': " << controller_id_);
-    update_parameter_server  = true;
+    udpate_ros2_parameter  = true;
   }
   else if(node->get_parameter(CONTROLLER_PARAM_NAME, controller_id_))
   {
@@ -97,11 +99,12 @@ PlannerSelector::PlannerSelector(
   else
   {
     RCLCPP_WARN_STREAM(logger, "PlannerSelector, default controller_id was not specified neither as ros2 parameter '" << CONTROLLER_PARAM_NAME << "' nor bt node input in bt xml '" << DEFAULT_CONTROLLER_BT_INPUT"'. Using by default '" << controller_id_ << "'");
-    update_parameter_server  = true;
+    udpate_ros2_parameter  = true;
   }
 
-  if(update_parameter_server)
+  if(udpate_ros2_parameter)
   {
+    RCLCPP_WARN_STREAM(logger, "updating controller id id to:" <<planner_id_ );
     node->set_parameter(rclcpp::Parameter(CONTROLLER_PARAM_NAME, controller_id_));
   }
   //-----------------------------
