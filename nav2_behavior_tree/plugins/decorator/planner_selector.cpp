@@ -47,7 +47,7 @@ PlannerSelector::PlannerSelector(
 {
   auto logger = rclcpp::get_logger("planner_selector");
   RCLCPP_WARN_STREAM(rclcpp::get_logger("planner_selector"), "Planner selector constructor ");
-
+  //auto node = std::make_shared<rclcpp::Node>("PlannerSelectorNode");
   auto node = config().blackboard->get<nav2_util::LifecycleNode::SharedPtr>("bt_navigator_node");
   RCLCPP_WARN_STREAM(rclcpp::get_logger("planner_selector"), "Planner selector Start, Node: " << node->get_name());
 

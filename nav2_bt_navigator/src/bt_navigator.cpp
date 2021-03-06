@@ -113,6 +113,7 @@ BtNavigator::on_configure(const rclcpp_lifecycle::State & /*state*/)
   blackboard->set<std::shared_ptr<tf2_ros::Buffer>>("tf_buffer", tf_);  // NOLINT
   blackboard->set<bool>("initial_pose_received", false);  // NOLINT
   blackboard->set<int>("number_recoveries", 0);  // NOLINT
+  blackboard->set<nav2_util::LifecycleNode::SharedPtr>("bt_navigator_node", shared_from_this());
 
   return nav2_util::CallbackReturn::SUCCESS;
 }
