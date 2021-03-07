@@ -70,6 +70,8 @@ protected:
   bool stateful_, check_xy_;
   // Cached squared xy_goal_tolerance_
   double xy_goal_tolerance_sq_;
+  rclcpp::Logger* logger_;
+  std::string plugin_name_;
 };
 
 }  // namespace nav2_controller

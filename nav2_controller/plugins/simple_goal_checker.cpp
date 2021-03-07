@@ -61,6 +61,8 @@ void SimpleGoalChecker::initialize(
 {
   auto node = parent.lock();
 
+  plugin_name_ = plugin_name; 
+  logger_ = new rclcpp::Logger(node->get_logger());
   nav2_util::declare_parameter_if_not_declared(
     node,
     plugin_name + ".xy_goal_tolerance", rclcpp::ParameterValue(0.25));
@@ -87,6 +89,7 @@ bool SimpleGoalChecker::isGoalReached(
   const geometry_msgs::msg::Pose & query_pose, const geometry_msgs::msg::Pose & goal_pose,
   const geometry_msgs::msg::Twist &)
 {
+  RCLCPP_INFO_STREAM((*logger_), "[GoalChecker] "<< plugin_name_ << " -> xytol "<< xy_goal_tolerance_sq_ << " yawtol " << yaw_goal_tolerance_);
   if (check_xy_) {
     double dx = query_pose.position.x - goal_pose.position.x,
       dy = query_pose.position.y - goal_pose.position.y;

@@ -360,6 +360,9 @@ void ControllerServer::computeControl()
     std::string gc_name ;
     get_parameter("current_goal_checker", gc_name);
     std::string current_goal_checker;
+    RCLCPP_WARN_STREAM(get_logger(), "[Nav2Controller] Current goal checker :"<< gc_name);
+    //throw std::exception();
+
     if (findGoalCheckerId(gc_name, current_goal_checker)) {
       current_goal_checker_ = current_goal_checker;
     } else {
